@@ -84,11 +84,11 @@
       <input type="password" id="passInput" autocomplete="current-password">
     </div>
     <div class="field" id="passConfirmField" style="display:none;">
-      <label>Confirmar contraseña</label>
-      <input type="password" id="passConfirmInput">
+      <label>Confirmar contraseña</label><input type="password" id="passConfirmInput">
     </div>
 
     <button class="btn btn-primary" id="loginBtn">Ingresar</button>
+    <button class="btn btn-ghost" id="resetAdminBtn" style="margin-top:10px;">Restablecer administrador</button>
     <div class="msg error" id="loginMsg"></div>
   </div>
 
@@ -130,12 +130,11 @@
 
 <script>
   const DB_URL = 'https://redares-7add7-default-rtdb.firebaseio.com';
-  const CONFIG_URL = `${DB_URL}/redares/config.json`;
-  const ADMIN_URL = `${DB_URL}/redares/admin.json`;
+  const CONFIG_URL = ${DB_URL}/redares/config.json;
+  const ADMIN_URL = ${DB_URL}/redares/admin.json;
   const DEFAULTS = { telegram:'redares', promoPercent:'50', promoText:'en tu primera carga' };
 
   let admin = null;
-  let sessionOk = false;
 
   const loginView = document.getElementById('loginView');
   const dashView = document.getElementById('dashView');
@@ -226,7 +225,7 @@
     const pct = document.getElementById('promoPercentInput').value.trim().replace(/\D/g,'');
     const txt = document.getElementById('promoTextInput').value.trim();
 
-    if(!tg || !pct || !txt){
+    if(!tg  !pct  !txt){
       saveMsg.className = 'msg error';
       saveMsg.textContent = 'Completá todos los campos.';
       return;
@@ -242,8 +241,20 @@
     }
   });
 
-admin = nuLL;
-  renderLoginview(); 
+  document.getElementById('resetAdminBtn').addEventListener('click', async ()=>{
+    if(confirm('Esto eliminará el usuario administrador guardado. ¿Continuar?')){
+      try{
+        await fetch(ADMIN_URL,{method:'DELETE'});
+        admin=null;
+        renderLoginView();
+        alert('Administrador eliminado. Ahora podés crear uno nuevo.');
+      }catch(e){
+        alert('No se pudo restablecer.');
+      }
+    }
+  });
+
+  loadAdmin();
 </script>
 
 </body>
