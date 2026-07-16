@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RED ARES — Panel de administrador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080A; --card:#111113; --line:#2A2A2D;
+    --red:#C1121F; --red-bright:#EA1F2D; --gold:#D4A017;
+    --green:#22C55E; --text:#F4F1EA; --muted:#9A968E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    min-height:100vh; background: var(--bg); font-family:'Inter',sans-serif; color:var(--text);
+    display:flex; align-items:center; justify-content:center; padding: 24px 14px;
+  }
+  .display{ font-family:'Anton',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.02em; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .panel{
+    width:100%; max-width: 440px; background: var(--card); border:1px solid var(--line);
+    border-radius: 8px; padding: 32px 28px; position:relative;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; margin-bottom: 24px; }
+  .crest{ width:34px; height:34px; border-radius:6px; background:linear-gradient(150deg,var(--red-bright),#4a0507); display:flex;align-items:center;justify-content:center; font-size:16px; }
+  .brand .name{ font-size:18px; }
+  .brand .name span{ color: var(--red-bright); }
+  .tag{ font-size:11px; color: var(--muted); text-transform:uppercase; letter-spacing:0.12em; margin-left:auto; border:1px solid var(--line); padding:4px 10px; border-radius:4px; }
+
+  h1{ font-size:24px; margin-bottom:6px; }
+  p.hint{ color:var(--muted); font-size:13px; margin-bottom:22px; line-height:1.5; }
+
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; font-weight:700; }
+  .field input{
+    width:100%; padding:12px 14px; border-radius:6px; border:1px solid var(--line);
+    background: var(--bg); color: var(--text); font-size:14px; font-family:inherit;
+  }
+  .field input:focus{ outline:none; border-color: var(--red-bright); }
+  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+  .btn{
+    width:100%; padding:13px; border-radius:6px; font-weight:700; font-size:14px;
+    border:1px solid var(--line); background:none; color:var(--text); margin-top:6px;
+  }
+  .btn-primary{ background: var(--red-bright); border-color: var(--red-bright); color:#fff; }
+  .btn-primary:hover{ background: var(--red); }
+  .btn-ghost:hover{ border-color: var(--muted); }
+
+  .msg{ font-size:12px; margin-top:12px; min-height:16px; text-align:center; }
+  .msg.error{ color: var(--red-bright); }
+  .msg.success{ color: var(--green); }
+
+  .divider{ height:1px; background:var(--line); margin:24px 0; }
+  .section-title{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:14px; }
+
+  .top-actions{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  .logout{ font-size:12px; color:var(--muted); background:none; border:none; text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="brand">
+    <div class="crest">⚔️</div>
+    <div class="name display">RED<span>ARES</span></div>
+    <div class="tag">Admin</div>
+  </div>
+
+  <!-- LOGIN / SETUP -->
+  <div id="loginView">
+    <h1 id="loginTitle" class="display" style="font-size:22px;">Iniciar sesión</h1>
+    <p class="hint" id="loginHint">Ingresá tu usuario y contraseña de administrador.</p>
+
+    <div class="field">
+      <label>Usuario</label>
+      <input type="text" id="userInput" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Contraseña</label>
+      <input type="password" id="passInput" autocomplete="current-password">
+    </div>
+    <div class="field" id="passConfirmField" style="display:none;">
+      <label>Confirmar contraseña</label>
+      <input type="password" id="passConfirmInput">
+    </div>
+
+    <button class="btn btn-primary" id="loginBtn">Ingresar</button>
+    <div class="msg error" id="loginMsg"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashView" style="display:none;">
+    <div class="top-actions">
+      <p class="hint" style="margin:0;">Sesión iniciada</p>
+      <button class="logout" id="logoutBtn">Cerrar sesión</button>
+    </div>
+
+    <div class="section-title">Canal de ingreso</div>
+    <div class="field">
+      <label>Usuario de Telegram (sin @)</label>
+      <input type="text" id="tgInput" placeholder="Ej: redares">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">Promoción</div>
+    <div class="row2">
+      <div class="field">
+        <label>% de bono</label>
+        <input type="text" id="promoPercentInput" placeholder="Ej: 50">
+      </div>
+      <div class="field">
+        <label>Texto del bono</label>
+        <input type="text" id="promoTextInput" placeholder="Ej: en tu primera carga">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="saveBtn">Guardar cambios</button>
+    <div class="msg success" id="saveMsg"></div>
+
+    <div class="divider"></div>
+    <div class="section-title">Seguridad</div>
+    <button class="btn btn-ghost" id="changePassBtn">Cambiar contraseña</button>
+  </div>
+</div>
+
+<script>
+  const DB_URL = 'https://redares-7add7-default-rtdb.firebaseio.com';
+  const CONFIG_URL = `${DB_URL}/redares/config.json`;
+  const ADMIN_URL = `${DB_URL}/redares/admin.json`;
+  const DEFAULTS = { telegram:'redares', promoPercent:'50', promoText:'en tu primera carga' };
+
+  let admin = null;
+  let sessionOk = false;
+
+  const loginView = document.getElementById('loginView');
+  const dashView = document.getElementById('dashView');
+  const loginTitle = document.getElementById('loginTitle');
+  const loginHint = document.getElementById('loginHint');
+  const passConfirmField = document.getElementById('passConfirmField');
+  const loginMsg = document.getElementById('loginMsg');
+  const saveMsg = document.getElementById('saveMsg');
+
+  async function loadAdmin(){
+    try{
+      const res = await fetch(ADMIN_URL);
+      const data = await res.json();
+      if(data){ admin = data; }
+    }catch(e){ admin = null; }
+    renderLoginView();
+  }
+
+  function renderLoginView(){
+    document.getElementById('userInput').value = '';
+    document.getElementById('passInput').value = '';
+    document.getElementById('passConfirmInput').value = '';
+    loginMsg.textContent = '';
+    if(admin){
+      loginTitle.textContent = 'Iniciar sesión';
+      loginHint.textContent = 'Ingresá tu usuario y contraseña de administrador.';
+      passConfirmField.style.display = 'none';
+    } else {
+      loginTitle.textContent = 'Crear acceso de administrador';
+      loginHint.textContent = 'Todavía no hay un usuario configurado. Creá el usuario y contraseña que vas a usar para entrar acá.';
+      passConfirmField.style.display = 'block';
+    }
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', async () => {
+    const u = document.getElementById('userInput').value.trim();
+    const p = document.getElementById('passInput').value;
+
+    if(!admin){
+      const p2 = document.getElementById('passConfirmInput').value;
+      if(u.length < 3){ loginMsg.textContent = 'El usuario debe tener al menos 3 caracteres.'; return; }
+      if(p.length < 4){ loginMsg.textContent = 'La contraseña debe tener al menos 4 caracteres.'; return; }
+      if(p !== p2){ loginMsg.textContent = 'Las contraseñas no coinciden.'; return; }
+      admin = { user: u, pass: p };
+      try{
+        await fetch(ADMIN_URL, { method:'PUT', body: JSON.stringify(admin) });
+      }catch(e){}
+      enterDashboard();
+    } else {
+      if(u === admin.user && p === admin.pass){
+        enterDashboard();
+      } else {
+        loginMsg.textContent = 'Usuario o contraseña incorrectos.';
+      }
+    }
+  });
+
+  document.getElementById('changePassBtn').addEventListener('click', () => {
+    admin = null;
+    dashView.style.display = 'none';
+    loginView.style.display = 'block';
+    renderLoginView();
+    loginHint.textContent = 'Creá tu nuevo usuario y contraseña.';
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    dashView.style.display = 'none';
+    loginView.style.display = 'block';
+    renderLoginView();
+  });
+
+  async function enterDashboard(){
+    loginView.style.display = 'none';
+    dashView.style.display = 'block';
+    let config = { ...DEFAULTS };
+    try{
+      const res = await fetch(CONFIG_URL);
+      const data = await res.json();
+      if(data){ config = { ...config, ...data }; }
+    }catch(e){ /* usa defaults */ }
+    document.getElementById('tgInput').value = config.telegram;
+    document.getElementById('promoPercentInput').value = config.promoPercent;
+    document.getElementById('promoTextInput').value = config.promoText;
+  }
+
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    const tg = document.getElementById('tgInput').value.trim().replace('@','');
+    const pct = document.getElementById('promoPercentInput').value.trim().replace(/\D/g,'');
+    const txt = document.getElementById('promoTextInput').value.trim();
+
+    if(!tg || !pct || !txt){
+      saveMsg.className = 'msg error';
+      saveMsg.textContent = 'Completá todos los campos.';
+      return;
+    }
+    const config = { telegram: tg, promoPercent: pct, promoText: txt };
+    try{
+      await fetch(CONFIG_URL, { method:'PUT', body: JSON.stringify(config) });
+      saveMsg.className = 'msg success';
+      saveMsg.textContent = 'Cambios guardados. Ya se reflejan en la página pública.';
+    }catch(e){
+      saveMsg.className = 'msg error';
+      saveMsg.textContent = 'No se pudo guardar. Intentá de nuevo.';
+    }
+  });
+
+  loadAdmin();
+</script>
+
+</body>
+</html>
