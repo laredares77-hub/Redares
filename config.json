@@ -1,0 +1,16 @@
+{
+  "game": {
+    "label": "Ingresar",
+    "url": "#",
+    "active": true
+  },
+  "whatsapp": [
+    { "id": "wa_1", "label": "WhatsApp 1", "number": "", "active": true },
+    { "id": "wa_2", "label": "WhatsApp 2", "number": "", "active": true }
+  ],
+  "telegram": {
+    "label": "Canal oficial",
+    "url": "#",
+    "active": true
+  }
+}
