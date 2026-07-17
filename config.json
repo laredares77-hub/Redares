@@ -7,15 +7,15 @@
   "whatsapp": [
     {
       "id": "wa_1",
-      "label": "WhatsApp 1",
+      "label": "Cajera sofi",
       "number": "5492964662387",
       "active": true
     },
     {
       "id": "wa_2",
-      "label": "WhatsApp 2",
-      "number": "",
-      "active": false
+      "label": "Cajera agus",
+      "number": "5492964576248",
+      "active": true
     }
   ],
   "telegram": {
