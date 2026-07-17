@@ -1,16 +1,26 @@
 {
   "game": {
-    "label": "Ingresar",
-    "url": "#",
+    "label": "INGRSA A LA PLATAFORMA",
+    "url": "https://konabet.click/",
     "active": true
   },
   "whatsapp": [
-    { "id": "wa_1", "label": "WhatsApp 1", "number": "", "active": true },
-    { "id": "wa_2", "label": "WhatsApp 2", "number": "", "active": true }
+    {
+      "id": "wa_1",
+      "label": "WhatsApp 1",
+      "number": "5492964662387",
+      "active": true
+    },
+    {
+      "id": "wa_2",
+      "label": "WhatsApp 2",
+      "number": "",
+      "active": false
+    }
   ],
   "telegram": {
-    "label": "Canal oficial",
-    "url": "#",
+    "label": "TELEGRAM OFICIAL ",
+    "url": "REDARES7",
     "active": true
   }
 }
