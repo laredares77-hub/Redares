@@ -3,160 +3,543 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RED ARES</title>
+<title>RED ARES — Panel de Control</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0c;
     --panel: #131316;
+    --panel-2: #17171a;
     --panel-border: #232328;
     --red: #c1121f;
     --red-bright: #e5383b;
+    --green: #2fbf71;
+    --amber: #e5a83b;
     --text: #f2f2f2;
     --text-dim: #8a8a92;
+    --mono: 'JetBrains Mono', monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
     background: var(--bg);
     background-image:
-      radial-gradient(circle at 50% 0%, rgba(193, 18, 31, 0.14), transparent 55%),
+      radial-gradient(circle at 50% 0%, rgba(193, 18, 31, 0.10), transparent 55%),
       repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 48px),
       repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 48px);
     color: var(--text);
     font-family: 'Inter', -apple-system, sans-serif;
     min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    padding: 32px 20px;
+    padding: 32px 20px 80px;
   }
-  .card {
-    width: 100%; max-width: 440px;
+  .wrap { max-width: 640px; margin: 0 auto; }
+
+  /* ---------- Login gate ---------- */
+  #loginScreen {
+    min-height: 80vh; display: flex; align-items: center; justify-content: center;
+  }
+  .login-card {
+    width: 100%; max-width: 360px;
     background: linear-gradient(180deg, var(--panel) 0%, #0d0d0f 100%);
     border: 1px solid var(--panel-border);
-    border-radius: 20px;
-    padding: 40px 32px 36px;
-    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02);
-    position: relative; overflow: hidden;
+    border-radius: 18px;
+    padding: 32px 28px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7);
   }
-  .card::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, transparent, var(--red-bright), transparent);
-  }
-  .mark { display: flex; align-items: center; justify-content: center; margin-bottom: 26px; }
-  .mark-glyph {
-    width: 72px; height: 72px; border: 2px solid var(--red-bright); border-radius: 10px;
+  .login-card .mark-glyph {
+    width: 56px; height: 56px; margin: 0 auto 18px;
+    border: 2px solid var(--red-bright); border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.6rem; color: var(--red-bright);
-    box-shadow: 0 0 18px rgba(229, 56, 59, 0.35); transform: rotate(45deg);
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--red-bright);
+    box-shadow: 0 0 16px rgba(229, 56, 59, 0.3); transform: rotate(45deg);
+  }
+  .login-card .mark-glyph span { transform: rotate(-45deg); }
+  .login-card h2 {
+    font-family: 'Oswald', sans-serif; text-transform: uppercase; text-align: center;
+    font-size: 1.05rem; letter-spacing: 0.05em; margin-bottom: 22px; color: var(--text-dim);
+  }
+  .login-card input {
+    width: 100%; background: #0c0c0e; border: 1px solid var(--panel-border);
+    border-radius: 8px; padding: 12px 14px; color: var(--text); font-family: var(--mono);
+    font-size: 0.9rem; margin-bottom: 12px; outline: none;
+  }
+  .login-card input:focus { border-color: var(--red-bright); }
+  .login-card button {
+    width: 100%; background: linear-gradient(180deg, #d81e26, #a30f1a);
+    border: 1px solid #e5383b; border-radius: 10px; padding: 13px; color: #fff;
+    font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-top: 6px;
+  }
+  .login-error { color: var(--red-bright); font-size: 0.78rem; text-align: center; margin-top: 10px; min-height: 16px; }
+
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 28px; }
+  .top-left { display: flex; align-items: center; gap: 14px; }
+  .mark-glyph {
+    width: 48px; height: 48px;
+    border: 2px solid var(--red-bright);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.05rem;
+    color: var(--red-bright);
+    box-shadow: 0 0 14px rgba(229, 56, 59, 0.3);
+    transform: rotate(45deg); flex-shrink: 0;
   }
   .mark-glyph span { transform: rotate(-45deg); }
-  .eyebrow { text-align: center; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
-  h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.9rem; letter-spacing: 0.02em; text-align: center; text-transform: uppercase; margin-bottom: 34px; }
-  h1 span { color: var(--red-bright); }
-  .buttons { display: flex; flex-direction: column; gap: 14px; }
-  .btn {
-    display: flex; align-items: center; gap: 14px;
-    background: #17171a; border: 1px solid var(--panel-border); border-radius: 12px;
-    padding: 16px 18px; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600;
-    color: var(--text); text-decoration: none;
-    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  .top h1 {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.3rem;
+    text-transform: uppercase; letter-spacing: 0.03em;
   }
-  .btn:hover { transform: translateY(-1px); }
-  .btn-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .btn-icon svg { width: 21px; height: 21px; }
-  .btn-text small { display: block; font-weight: 400; font-size: 0.76rem; color: var(--text-dim); margin-top: 1px; }
-  .btn.primary { background: linear-gradient(180deg, #d81e26, #a30f1a); border-color: #e5383b; }
-  .btn.primary .btn-icon { background: rgba(0,0,0,0.18); }
-  .btn.primary .btn-icon svg { fill: #ffd873; }
-  .btn.primary:hover { background: linear-gradient(180deg, #e12129, #b31119); }
-  .btn.whatsapp .btn-icon { background: rgba(37, 211, 102, 0.14); }
-  .btn.whatsapp .btn-icon svg { fill: #25d366; }
-  .btn.whatsapp:hover { border-color: #25d366; background: #14201a; }
-  .btn.telegram .btn-icon { background: rgba(42, 171, 238, 0.14); }
-  .btn.telegram .btn-icon svg { fill: #2aabee; }
-  .btn.telegram:hover { border-color: #2aabee; background: #101c26; }
-  .empty-note { text-align: center; font-size: 0.8rem; color: var(--text-dim); padding: 10px 0; }
-  footer { text-align: center; font-size: 0.72rem; color: #55555c; margin-top: 28px; letter-spacing: 0.04em; }
-  @media (max-width: 380px) { .card { padding: 32px 22px 28px; } h1 { font-size: 1.55rem; } }
+  .top p { font-size: 0.74rem; color: var(--text-dim); letter-spacing: 0.05em; margin-top: 2px; }
+  .logout-btn {
+    background: none; border: 1px solid var(--panel-border); color: var(--text-dim);
+    border-radius: 8px; padding: 8px 12px; font-size: 0.74rem; cursor: pointer;
+  }
+  .logout-btn:hover { border-color: var(--red-bright); color: var(--text); }
+
+  .section { margin-bottom: 22px; }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .card {
+    background: linear-gradient(180deg, var(--panel) 0%, #0d0d0f 100%);
+    border: 1px solid var(--panel-border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .card.inactive { opacity: 0.55; }
+  .card-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .card-row:last-child { margin-bottom: 0; }
+
+  input[type="text"], input[type="tel"], input[type="password"] {
+    flex: 1;
+    background: #0c0c0e;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.15s ease;
+    min-width: 0;
+  }
+  input:focus { border-color: var(--red-bright); }
+  input::placeholder { color: #4a4a52; }
+
+  .field-label { font-size: 0.68rem; color: var(--text-dim); width: 62px; flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.04em; }
+
+  .toggle {
+    display: flex; align-items: center; gap: 8px; cursor: pointer;
+    font-size: 0.76rem; color: var(--text-dim); user-select: none;
+  }
+  .switch {
+    width: 36px; height: 20px; border-radius: 20px;
+    background: #2a2a2e; position: relative; transition: background 0.2s ease; flex-shrink: 0;
+  }
+  .switch::after {
+    content: ""; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; border-radius: 50%; background: #6b6b72;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .switch.on { background: rgba(47, 191, 113, 0.25); }
+  .switch.on::after { transform: translateX(16px); background: var(--green); }
+
+  .remove-btn {
+    background: none; border: none; color: #5a5a62; font-size: 1.1rem;
+    cursor: pointer; padding: 4px 8px; line-height: 1; flex-shrink: 0;
+    transition: color 0.15s ease;
+  }
+  .remove-btn:hover { color: var(--red-bright); }
+
+  .add-btn {
+    width: 100%;
+    background: var(--panel-2);
+    border: 1px dashed var(--panel-border);
+    border-radius: 12px;
+    padding: 12px;
+    color: var(--text-dim);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .add-btn:hover { border-color: var(--red-bright); color: var(--text); }
+
+  details.publish {
+    background: var(--panel); border: 1px solid var(--panel-border); border-radius: 14px;
+    padding: 4px 16px; margin-bottom: 10px;
+  }
+  details.publish summary {
+    cursor: pointer; padding: 12px 0; font-size: 0.82rem; font-weight: 600; color: var(--text-dim);
+    list-style: none;
+  }
+  details.publish summary::-webkit-details-marker { display: none; }
+  details.publish[open] summary { color: var(--text); }
+  .publish-body { padding-bottom: 14px; }
+  .publish-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .publish-grid input { width: 100%; }
+
+  .save-bar {
+    position: sticky; bottom: 16px;
+    display: flex; gap: 10px; margin-top: 30px;
+  }
+  .save-btn, .publish-btn {
+    flex: 1;
+    background: linear-gradient(180deg, #d81e26, #a30f1a);
+    border: 1px solid #e5383b;
+    border-radius: 12px;
+    padding: 15px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    box-shadow: 0 10px 30px -10px rgba(193,18,31,0.5);
+    transition: filter 0.15s ease;
+  }
+  .publish-btn { background: linear-gradient(180deg, #23232a, #17171a); border-color: var(--panel-border); box-shadow: none; }
+  .save-btn:hover, .publish-btn:hover { filter: brightness(1.1); }
+  .save-btn:disabled, .publish-btn:disabled { opacity: 0.55; cursor: default; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%) translateY(20px);
+    background: var(--panel); border: 1px solid var(--green);
+    color: var(--text); padding: 10px 18px; border-radius: 10px;
+    font-size: 0.82rem; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none; z-index: 50; max-width: 90vw; text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { border-color: var(--red-bright); }
+
+  .hint { font-size: 0.72rem; color: #55555c; margin-top: 8px; line-height: 1.5; }
 </style>
 </head>
 <body>
-  <div class="card">
-    <div class="mark"><div class="mark-glyph"><span>RA</span></div></div>
-    <p class="eyebrow">Portal de acceso</p>
-    <h1><span>RED</span> ARES</h1>
-    <div class="buttons" id="buttons">
-      <p class="empty-note">Cargando…</p>
+
+  <!-- ============ ADMIN PANEL ============ -->
+  <div class="wrap" id="panel">
+    <div class="top">
+      <div class="top-left">
+        <div class="mark-glyph"><span>RA</span></div>
+        <div>
+          <h1>Panel de control</h1>
+          <p>RED ARES · GATEWAY</p>
+        </div>
+      </div>
     </div>
-    <footer>RED ARES · TODOS LOS DERECHOS RESERVADOS</footer>
+
+    <div class="section">
+      <div class="section-label">Acceso a la plataforma</div>
+      <div class="card" id="gameCard">
+        <div class="card-row">
+          <span class="field-label">Texto</span>
+          <input type="text" id="gameLabel" placeholder="Ingresar">
+        </div>
+        <div class="card-row">
+          <span class="field-label">Link</span>
+          <input type="text" id="gameUrl" placeholder="https://...">
+        </div>
+        <div class="card-row">
+          <label class="toggle" id="gameToggle">
+            <span class="switch on"></span> Activo
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label"><span>WhatsApp</span></div>
+      <div id="waList"></div>
+      <button class="add-btn" id="addWa">+ Agregar número de WhatsApp</button>
+      <p class="hint">Si un número se cae por reportes o baneo, marcalo como inactivo — desaparece del gateway sin tocar el link.</p>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Telegram</div>
+      <div class="card" id="tgCard">
+        <div class="card-row">
+          <span class="field-label">Texto</span>
+          <input type="text" id="tgLabel" placeholder="Canal oficial">
+        </div>
+        <div class="card-row">
+          <span class="field-label">Link</span>
+          <input type="text" id="tgUrl" placeholder="https://t.me/...">
+        </div>
+        <div class="card-row">
+          <label class="toggle" id="tgToggle">
+            <span class="switch on"></span> Activo
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <details class="publish">
+        <summary>⚙ Publicar directo a GitHub (opcional)</summary>
+        <div class="publish-body">
+          <div class="publish-grid">
+            <input type="text" id="ghOwner" placeholder="usuario u organización">
+            <input type="text" id="ghRepo" placeholder="nombre-del-repo">
+            <input type="text" id="ghBranch" placeholder="rama (ej: main)">
+            <input type="text" id="ghPath" placeholder="ruta (ej: config.json)">
+          </div>
+          <input type="password" id="ghToken" placeholder="Token de GitHub (no se guarda)" autocomplete="off">
+          <p class="hint">Creá un token en GitHub → Settings → Developer settings → Fine-grained tokens, con permiso "Contents: Read and write" limitado a este repo. El token solo vive en esta pestaña mientras la tenés abierta — no se guarda en ningún lado.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="save-bar">
+      <button class="save-btn" id="downloadBtn">Descargar config.json</button>
+      <button class="publish-btn" id="publishBtn">Publicar a GitHub</button>
+    </div>
   </div>
 
+  <div class="toast" id="toast"></div>
+
 <script>
-const ICONS = {
-  game: '<svg viewBox="0 0 512 512"><path d="M512 80c0 18-14.9 34.1-38.7 47C433.1 148.4 349 174 256 174S78.9 148.4 38.7 127C14.9 114.1 0 98 0 80c0-44.2 114.6-80 256-80S512 35.8 512 80zM474.7 99.6C451.5 111.6 415.6 122.4 373.3 130.1C359.1 132.7 344.1 134.7 328.6 136C305.5 138.1 281 139.2 256 139.2S206.5 138.1 183.4 136C167.9 134.7 152.9 132.7 138.7 130.1C96.4 122.4 60.5 111.6 37.3 99.6C13.9 111.9 0 125.4 0 140V190C0 234.2 114.6 270 256 270S512 234.2 512 190V140C512 125.4 498.1 111.9 474.7 99.6zM256 306C114.6 306 0 270.2 0 226V276C0 320.2 114.6 356 256 356S512 320.2 512 276V226C512 270.2 397.4 306 256 306zM256 392C114.6 392 0 356.2 0 312V362C0 406.2 114.6 442 256 442S512 406.2 512 362V312C512 356.2 397.4 392 256 392z"/></svg>',
-  whatsapp: '<svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>',
-  telegram: '<svg viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm121.8 169.9l-40.7 191.8c-3 13.6-11.1 16.9-22.4 10.5l-62-45.7-29.9 28.8c-3.3 3.3-6.1 6.1-12.5 6.1l4.4-63.1 114.9-103.8c5-4.4-1.1-6.9-7.7-2.5l-142 89.4-61.2-19.1c-13.3-4.2-13.6-13.3 2.8-19.7l239.1-92.2c11.1-4 20.8 2.7 17.2 19.5z"/></svg>'
+/* ============================================================
+   ESTADO DE CANALES
+   ============================================================ */
+let state = {
+  game: { label: 'Ingresar', url: '#', active: true },
+  whatsapp: [],
+  telegram: { label: 'Canal oficial', url: '#', active: true }
 };
+let waIdCounter = 0;
 
-function waLink(number) {
-  const digits = (number || '').replace(/[^0-9]/g, '');
-  return digits ? ('https://wa.me/' + digits) : '#';
+function newWaEntry(label, number, active) {
+  waIdCounter += 1;
+  return { id: 'wa_' + waIdCounter + '_' + Date.now(), label: label || ('WhatsApp ' + (state.whatsapp.length + 1)), number: number || '', active: active !== false };
 }
 
-function buildButton(cls, iconSvg, url, label, sub) {
-  const a = document.createElement('a');
-  a.href = url || '#';
-  a.target = '_blank';
-  a.rel = 'noopener';
-  a.className = 'btn ' + cls;
-  a.innerHTML =
-    '<span class="btn-icon">' + iconSvg + '</span>' +
-    '<span class="btn-text">' + label + (sub ? ('<small>' + sub + '</small>') : '') + '</span>';
-  return a;
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(() => { t.className = 'toast'; }, 2800);
 }
 
-async function render() {
-  const container = document.getElementById('buttons');
-  container.innerHTML = '';
-  let config = null;
-  try {
-    // cache-busting param so GitHub Pages / browser cache doesn't serve a stale config
-    const res = await fetch('./config.json?v=' + Date.now());
-    if (res.ok) config = await res.json();
-  } catch (err) {
-    config = null;
+function renderWaList() {
+  const list = document.getElementById('waList');
+  list.innerHTML = '';
+  state.whatsapp.forEach((entry) => {
+    const card = document.createElement('div');
+    card.className = 'card' + (entry.active ? '' : ' inactive');
+
+    const row1 = document.createElement('div');
+    row1.className = 'card-row';
+    const lbl1 = document.createElement('span');
+    lbl1.className = 'field-label';
+    lbl1.textContent = 'Nombre';
+    const inputLabel = document.createElement('input');
+    inputLabel.type = 'text';
+    inputLabel.placeholder = 'WhatsApp 1';
+    inputLabel.value = entry.label;
+    inputLabel.oninput = (e) => { entry.label = e.target.value; };
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-btn';
+    removeBtn.textContent = '✕';
+    removeBtn.onclick = () => {
+      state.whatsapp = state.whatsapp.filter(w => w.id !== entry.id);
+      renderWaList();
+    };
+    row1.appendChild(lbl1);
+    row1.appendChild(inputLabel);
+    row1.appendChild(removeBtn);
+
+    const row2 = document.createElement('div');
+    row2.className = 'card-row';
+    const lbl2 = document.createElement('span');
+    lbl2.className = 'field-label';
+    lbl2.textContent = 'Número';
+    const inputNum = document.createElement('input');
+    inputNum.type = 'tel';
+    inputNum.placeholder = '549 11 2345 6789';
+    inputNum.value = entry.number;
+    inputNum.oninput = (e) => { entry.number = e.target.value; };
+    row2.appendChild(lbl2);
+    row2.appendChild(inputNum);
+
+    const row3 = document.createElement('div');
+    row3.className = 'card-row';
+    const toggle = document.createElement('label');
+    toggle.className = 'toggle';
+    const sw = document.createElement('span');
+    sw.className = 'switch' + (entry.active ? ' on' : '');
+    toggle.appendChild(sw);
+    toggle.appendChild(document.createTextNode(entry.active ? ' Activo' : ' Inactivo'));
+    toggle.onclick = () => { entry.active = !entry.active; renderWaList(); };
+    row3.appendChild(toggle);
+
+    card.appendChild(row1);
+    card.appendChild(row2);
+    card.appendChild(row3);
+    list.appendChild(card);
+  });
+}
+
+function wireSimpleToggle(toggleId, cardId, stateObj) {
+  const toggle = document.getElementById(toggleId);
+  const card = document.getElementById(cardId);
+  function paint() {
+    const sw = toggle.querySelector('.switch');
+    sw.className = 'switch' + (stateObj.active ? ' on' : '');
+    toggle.childNodes[1].textContent = stateObj.active ? ' Activo' : ' Inactivo';
+    card.className = 'card' + (stateObj.active ? '' : ' inactive');
   }
+  toggle.onclick = () => { stateObj.active = !stateObj.active; paint(); };
+  paint();
+}
 
-  if (!config) {
-    container.innerHTML = '<p class="empty-note">Sin canales configurados todavía.</p>';
+function fillFormFromState() {
+  document.getElementById('gameLabel').value = state.game.label;
+  document.getElementById('gameUrl').value = state.game.url;
+  document.getElementById('tgLabel').value = state.telegram.label;
+  document.getElementById('tgUrl').value = state.telegram.url;
+  wireSimpleToggle('gameToggle', 'gameCard', state.game);
+  wireSimpleToggle('tgToggle', 'tgCard', state.telegram);
+  renderWaList();
+
+  document.getElementById('gameLabel').oninput = (e) => { state.game.label = e.target.value; };
+  document.getElementById('gameUrl').oninput = (e) => { state.game.url = e.target.value; };
+  document.getElementById('tgLabel').oninput = (e) => { state.telegram.label = e.target.value; };
+  document.getElementById('tgUrl').oninput = (e) => { state.telegram.url = e.target.value; };
+}
+
+async function loadConfigIntoForm() {
+  try {
+    const res = await fetch('./config.json?v=' + Date.now());
+    if (res.ok) {
+      const parsed = await res.json();
+      state = Object.assign(state, parsed);
+      if (!Array.isArray(state.whatsapp)) state.whatsapp = [];
+    }
+  } catch (err) {
+    // sin config.json todavía: se arranca con los valores por defecto
+  }
+  if (state.whatsapp.length === 0) {
+    state.whatsapp = [newWaEntry('WhatsApp 1', '', true), newWaEntry('WhatsApp 2', '', true)];
+  }
+  // restaurar posibles ediciones sin publicar de esta sesión
+  const draft = sessionStorage.getItem('red-ares-draft');
+  if (draft) {
+    try { state = JSON.parse(draft); } catch (e) {}
+  }
+  fillFormFromState();
+
+  const ghSettings = localStorage.getItem('red-ares-gh-settings');
+  if (ghSettings) {
+    try {
+      const s = JSON.parse(ghSettings);
+      document.getElementById('ghOwner').value = s.owner || '';
+      document.getElementById('ghRepo').value = s.repo || '';
+      document.getElementById('ghBranch').value = s.branch || 'main';
+      document.getElementById('ghPath').value = s.path || 'config.json';
+    } catch (e) {}
+  } else {
+    document.getElementById('ghBranch').value = 'main';
+    document.getElementById('ghPath').value = 'config.json';
+  }
+}
+
+function persistDraft() {
+  sessionStorage.setItem('red-ares-draft', JSON.stringify(state));
+}
+
+function downloadConfig() {
+  persistDraft();
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'config.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('config.json descargado — subilo a tu repo para aplicar los cambios');
+}
+
+function b64EncodeUnicode(str) {
+  return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (m, p1) => String.fromCharCode('0x' + p1)));
+}
+
+async function publishToGithub() {
+  const owner = document.getElementById('ghOwner').value.trim();
+  const repo = document.getElementById('ghRepo').value.trim();
+  const branch = document.getElementById('ghBranch').value.trim() || 'main';
+  const path = document.getElementById('ghPath').value.trim() || 'config.json';
+  const token = document.getElementById('ghToken').value.trim();
+
+  if (!owner || !repo || !token) {
+    showToast('Completá owner, repo y token para publicar', true);
     return;
   }
 
-  let rendered = 0;
+  localStorage.setItem('red-ares-gh-settings', JSON.stringify({ owner, repo, branch, path }));
+  persistDraft();
 
-  if (config.game && config.game.active) {
-    container.appendChild(buildButton('primary', ICONS.game, config.game.url, config.game.label || 'Ingresar', 'Acceder a la plataforma'));
-    rendered++;
+  const btn = document.getElementById('publishBtn');
+  btn.disabled = true;
+  btn.textContent = 'Publicando…';
+
+  const apiBase = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path;
+  const headers = {
+    'Authorization': 'Bearer ' + token,
+    'Accept': 'application/vnd.github+json'
+  };
+
+  try {
+    let sha = null;
+    const getRes = await fetch(apiBase + '?ref=' + encodeURIComponent(branch), { headers });
+    if (getRes.status === 200) {
+      const getJson = await getRes.json();
+      sha = getJson.sha;
+    } else if (getRes.status !== 404) {
+      const errJson = await getRes.json().catch(() => ({}));
+      throw new Error(errJson.message || ('Error al leer el archivo (HTTP ' + getRes.status + ')'));
+    }
+
+    const content = b64EncodeUnicode(JSON.stringify(state, null, 2));
+    const putBody = {
+      message: 'Actualizar config.json desde el panel de RED ARES',
+      content: content,
+      branch: branch
+    };
+    if (sha) putBody.sha = sha;
+
+    const putRes = await fetch(apiBase, {
+      method: 'PUT',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+      body: JSON.stringify(putBody)
+    });
+
+    if (!putRes.ok) {
+      const errJson = await putRes.json().catch(() => ({}));
+      throw new Error(errJson.message || ('Error al publicar (HTTP ' + putRes.status + ')'));
+    }
+
+    showToast('Publicado en GitHub ✓');
+  } catch (err) {
+    showToast(err.message || 'No se pudo publicar', true);
   }
 
-  (config.whatsapp || []).filter(w => w.active && w.number).forEach((w) => {
-    container.appendChild(buildButton('whatsapp', ICONS.whatsapp, waLink(w.number), w.label || 'WhatsApp', 'Soporte y comunidad'));
-    rendered++;
-  });
-
-  if (config.telegram && config.telegram.active) {
-    container.appendChild(buildButton('telegram', ICONS.telegram, config.telegram.url, config.telegram.label || 'Telegram', 'Canal oficial'));
-    rendered++;
-  }
-
-  if (rendered === 0) {
-    container.innerHTML = '<p class="empty-note">Todos los canales están inactivos ahora mismo.</p>';
-  }
+  btn.disabled = false;
+  btn.textContent = 'Publicar a GitHub';
 }
 
-render();
+document.getElementById('addWa').onclick = () => { state.whatsapp.push(newWaEntry()); renderWaList(); persistDraft(); };
+document.getElementById('downloadBtn').onclick = downloadConfig;
+document.getElementById('publishBtn').onclick = publishToGithub;
+
+loadConfigIntoForm();
 </script>
 </body>
 </html>
