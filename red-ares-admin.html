@@ -3,260 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RED ARES — Panel de administrador</title>
+<title>RED ARES</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#08080A; --card:#111113; --line:#2A2A2D;
-    --red:#C1121F; --red-bright:#EA1F2D; --gold:#D4A017;
-    --green:#22C55E; --text:#F4F1EA; --muted:#9A968E;
+  :root {
+    --bg: #0a0a0c;
+    --panel: #131316;
+    --panel-border: #232328;
+    --red: #c1121f;
+    --red-bright: #e5383b;
+    --text: #f2f2f2;
+    --text-dim: #8a8a92;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{
-    min-height:100vh; background: var(--bg); font-family:'Inter',sans-serif; color:var(--text);
-    display:flex; align-items:center; justify-content:center; padding: 24px 14px;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 50% 0%, rgba(193, 18, 31, 0.14), transparent 55%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 48px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 48px);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px 20px;
   }
-  .display{ font-family:'Anton',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:0.02em; }
-  button{ font-family:inherit; cursor:pointer; }
-
-  .panel{
-    width:100%; max-width: 440px; background: var(--card); border:1px solid var(--line);
-    border-radius: 8px; padding: 32px 28px; position:relative;
+  .card {
+    width: 100%; max-width: 440px;
+    background: linear-gradient(180deg, var(--panel) 0%, #0d0d0f 100%);
+    border: 1px solid var(--panel-border);
+    border-radius: 20px;
+    padding: 40px 32px 36px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02);
+    position: relative; overflow: hidden;
   }
-  .brand{ display:flex; align-items:center; gap:10px; margin-bottom: 24px; }
-  .crest{ width:34px; height:34px; border-radius:6px; background:linear-gradient(150deg,var(--red-bright),#4a0507); display:flex;align-items:center;justify-content:center; font-size:16px; }
-  .brand .name{ font-size:18px; }
-  .brand .name span{ color: var(--red-bright); }
-  .tag{ font-size:11px; color: var(--muted); text-transform:uppercase; letter-spacing:0.12em; margin-left:auto; border:1px solid var(--line); padding:4px 10px; border-radius:4px; }
-
-  h1{ font-size:24px; margin-bottom:6px; }
-  p.hint{ color:var(--muted); font-size:13px; margin-bottom:22px; line-height:1.5; }
-
-  .field{ margin-bottom:16px; }
-  .field label{ display:block; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px; font-weight:700; }
-  .field input{
-    width:100%; padding:12px 14px; border-radius:6px; border:1px solid var(--line);
-    background: var(--bg); color: var(--text); font-size:14px; font-family:inherit;
+  .card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--red-bright), transparent);
   }
-  .field input:focus{ outline:none; border-color: var(--red-bright); }
-  .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-
-  .btn{
-    width:100%; padding:13px; border-radius:6px; font-weight:700; font-size:14px;
-    border:1px solid var(--line); background:none; color:var(--text); margin-top:6px;
+  .mark { display: flex; align-items: center; justify-content: center; margin-bottom: 26px; }
+  .mark-glyph {
+    width: 72px; height: 72px; border: 2px solid var(--red-bright); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.6rem; color: var(--red-bright);
+    box-shadow: 0 0 18px rgba(229, 56, 59, 0.35); transform: rotate(45deg);
   }
-  .btn-primary{ background: var(--red-bright); border-color: var(--red-bright); color:#fff; }
-  .btn-primary:hover{ background: var(--red); }
-  .btn-ghost:hover{ border-color: var(--muted); }
-
-  .msg{ font-size:12px; margin-top:12px; min-height:16px; text-align:center; }
-  .msg.error{ color: var(--red-bright); }
-  .msg.success{ color: var(--green); }
-
-  .divider{ height:1px; background:var(--line); margin:24px 0; }
-  .section-title{ font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:14px; }
-
-  .top-actions{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
-  .logout{ font-size:12px; color:var(--muted); background:none; border:none; text-decoration:underline; }
+  .mark-glyph span { transform: rotate(-45deg); }
+  .eyebrow { text-align: center; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+  h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.9rem; letter-spacing: 0.02em; text-align: center; text-transform: uppercase; margin-bottom: 34px; }
+  h1 span { color: var(--red-bright); }
+  .buttons { display: flex; flex-direction: column; gap: 14px; }
+  .btn {
+    display: flex; align-items: center; gap: 14px;
+    background: #17171a; border: 1px solid var(--panel-border); border-radius: 12px;
+    padding: 16px 18px; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 600;
+    color: var(--text); text-decoration: none;
+    transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .btn-icon svg { width: 21px; height: 21px; }
+  .btn-text small { display: block; font-weight: 400; font-size: 0.76rem; color: var(--text-dim); margin-top: 1px; }
+  .btn.primary { background: linear-gradient(180deg, #d81e26, #a30f1a); border-color: #e5383b; }
+  .btn.primary .btn-icon { background: rgba(0,0,0,0.18); }
+  .btn.primary .btn-icon svg { fill: #ffd873; }
+  .btn.primary:hover { background: linear-gradient(180deg, #e12129, #b31119); }
+  .btn.whatsapp .btn-icon { background: rgba(37, 211, 102, 0.14); }
+  .btn.whatsapp .btn-icon svg { fill: #25d366; }
+  .btn.whatsapp:hover { border-color: #25d366; background: #14201a; }
+  .btn.telegram .btn-icon { background: rgba(42, 171, 238, 0.14); }
+  .btn.telegram .btn-icon svg { fill: #2aabee; }
+  .btn.telegram:hover { border-color: #2aabee; background: #101c26; }
+  .empty-note { text-align: center; font-size: 0.8rem; color: var(--text-dim); padding: 10px 0; }
+  footer { text-align: center; font-size: 0.72rem; color: #55555c; margin-top: 28px; letter-spacing: 0.04em; }
+  @media (max-width: 380px) { .card { padding: 32px 22px 28px; } h1 { font-size: 1.55rem; } }
 </style>
 </head>
 <body>
-
-<div class="panel">
-  <div class="brand">
-    <div class="crest">⚔️</div>
-    <div class="name display">RED<span>ARES</span></div>
-    <div class="tag">Admin</div>
+  <div class="card">
+    <div class="mark"><div class="mark-glyph"><span>RA</span></div></div>
+    <p class="eyebrow">Portal de acceso</p>
+    <h1><span>RED</span> ARES</h1>
+    <div class="buttons" id="buttons">
+      <p class="empty-note">Cargando…</p>
+    </div>
+    <footer>RED ARES · TODOS LOS DERECHOS RESERVADOS</footer>
   </div>
-
-  <!-- LOGIN / SETUP -->
-  <div id="loginView">
-    <h1 id="loginTitle" class="display" style="font-size:22px;">Iniciar sesión</h1>
-    <p class="hint" id="loginHint">Ingresá tu usuario y contraseña de administrador.</p>
-
-    <div class="field">
-      <label>Usuario</label>
-      <input type="text" id="userInput" autocomplete="username">
-    </div>
-    <div class="field">
-      <label>Contraseña</label>
-      <input type="password" id="passInput" autocomplete="current-password">
-    </div>
-    <div class="field" id="passConfirmField" style="display:none;">
-      <label>Confirmar contraseña</label>
-      <input type="password" id="passConfirmInput">
-    </div>
-
-    <button class="btn btn-primary" id="loginBtn">Ingresar</button>
-    <button class="btn btn-ghost" id="resetAdminBtn" style="margin-top:10px;">Restablecer administrador</button>
-    <div class="msg error" id="loginMsg"></div>
-  </div>
-
-  <!-- DASHBOARD -->
-  <div id="dashView" style="display:none;">
-    <div class="top-actions">
-      <p class="hint" style="margin:0;">Sesión iniciada</p>
-      <button class="logout" id="logoutBtn">Cerrar sesión</button>
-    </div>
-
-    <div class="section-title">Canal de ingreso</div>
-    <div class="field">
-      <label>Usuario de Telegram (sin @)</label>
-      <input type="text" id="tgInput" placeholder="Ej: redares">
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="section-title">Promoción</div>
-    <div class="row2">
-      <div class="field">
-        <label>% de bono</label>
-        <input type="text" id="promoPercentInput" placeholder="Ej: 50">
-      </div>
-      <div class="field">
-        <label>Texto del bono</label>
-        <input type="text" id="promoTextInput" placeholder="Ej: en tu primera carga">
-      </div>
-    </div>
-
-    <button class="btn btn-primary" id="saveBtn">Guardar cambios</button>
-    <div class="msg success" id="saveMsg"></div>
-
-    <div class="divider"></div>
-    <div class="section-title">Seguridad</div>
-    <button class="btn btn-ghost" id="changePassBtn">Cambiar contraseña</button>
-  </div>
-</div>
 
 <script>
-  const DB_URL = 'https://redares-7add7-default-rtdb.firebaseio.com';
-  const CONFIG_URL = `${DB_URL}/redares/config.json`;
-  const ADMIN_URL = `${DB_URL}/redares/admin.json`;
-  const DEFAULTS = { telegram:'redares', promoPercent:'50', promoText:'en tu primera carga' };
+const ICONS = {
+  game: '<svg viewBox="0 0 512 512"><path d="M512 80c0 18-14.9 34.1-38.7 47C433.1 148.4 349 174 256 174S78.9 148.4 38.7 127C14.9 114.1 0 98 0 80c0-44.2 114.6-80 256-80S512 35.8 512 80zM474.7 99.6C451.5 111.6 415.6 122.4 373.3 130.1C359.1 132.7 344.1 134.7 328.6 136C305.5 138.1 281 139.2 256 139.2S206.5 138.1 183.4 136C167.9 134.7 152.9 132.7 138.7 130.1C96.4 122.4 60.5 111.6 37.3 99.6C13.9 111.9 0 125.4 0 140V190C0 234.2 114.6 270 256 270S512 234.2 512 190V140C512 125.4 498.1 111.9 474.7 99.6zM256 306C114.6 306 0 270.2 0 226V276C0 320.2 114.6 356 256 356S512 320.2 512 276V226C512 270.2 397.4 306 256 306zM256 392C114.6 392 0 356.2 0 312V362C0 406.2 114.6 442 256 442S512 406.2 512 362V312C512 356.2 397.4 392 256 392z"/></svg>',
+  whatsapp: '<svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>',
+  telegram: '<svg viewBox="0 0 496 512"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm121.8 169.9l-40.7 191.8c-3 13.6-11.1 16.9-22.4 10.5l-62-45.7-29.9 28.8c-3.3 3.3-6.1 6.1-12.5 6.1l4.4-63.1 114.9-103.8c5-4.4-1.1-6.9-7.7-2.5l-142 89.4-61.2-19.1c-13.3-4.2-13.6-13.3 2.8-19.7l239.1-92.2c11.1-4 20.8 2.7 17.2 19.5z"/></svg>'
+};
 
-  let admin = null;
+function waLink(number) {
+  const digits = (number || '').replace(/[^0-9]/g, '');
+  return digits ? ('https://wa.me/' + digits) : '#';
+}
 
-  const loginView = document.getElementById('loginView');
-  const dashView = document.getElementById('dashView');
-  const loginTitle = document.getElementById('loginTitle');
-  const loginHint = document.getElementById('loginHint');
-  const passConfirmField = document.getElementById('passConfirmField');
-  const loginMsg = document.getElementById('loginMsg');
-  const saveMsg = document.getElementById('saveMsg');
+function buildButton(cls, iconSvg, url, label, sub) {
+  const a = document.createElement('a');
+  a.href = url || '#';
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.className = 'btn ' + cls;
+  a.innerHTML =
+    '<span class="btn-icon">' + iconSvg + '</span>' +
+    '<span class="btn-text">' + label + (sub ? ('<small>' + sub + '</small>') : '') + '</span>';
+  return a;
+}
 
-  async function loadAdmin(){
-    try{
-      const res = await fetch(ADMIN_URL);
-      const data = await res.json();
-      if(data){ admin = data; }
-    }catch(e){ admin = null; }
-    renderLoginView();
+async function render() {
+  const container = document.getElementById('buttons');
+  container.innerHTML = '';
+  let config = null;
+  try {
+    // cache-busting param so GitHub Pages / browser cache doesn't serve a stale config
+    const res = await fetch('./config.json?v=' + Date.now());
+    if (res.ok) config = await res.json();
+  } catch (err) {
+    config = null;
   }
 
-  function renderLoginView(){
-    document.getElementById('userInput').value = '';
-    document.getElementById('passInput').value = '';
-    document.getElementById('passConfirmInput').value = '';
-    loginMsg.textContent = '';
-    if(admin){
-      loginTitle.textContent = 'Iniciar sesión';
-      loginHint.textContent = 'Ingresá tu usuario y contraseña de administrador.';
-      passConfirmField.style.display = 'none';
-    } else {
-      loginTitle.textContent = 'Crear acceso de administrador';
-      loginHint.textContent = 'Todavía no hay un usuario configurado. Creá el usuario y contraseña que vas a usar para entrar acá.';
-      passConfirmField.style.display = 'block';
-    }
+  if (!config) {
+    container.innerHTML = '<p class="empty-note">Sin canales configurados todavía.</p>';
+    return;
   }
 
-  document.getElementById('loginBtn').addEventListener('click', async () => {
-    const u = document.getElementById('userInput').value.trim();
-    const p = document.getElementById('passInput').value;
+  let rendered = 0;
 
-    if(!admin){
-      const p2 = document.getElementById('passConfirmInput').value;
-      if(u.length < 3){ loginMsg.textContent = 'El usuario debe tener al menos 3 caracteres.'; return; }
-      if(p.length < 4){ loginMsg.textContent = 'La contraseña debe tener al menos 4 caracteres.'; return; }
-      if(p !== p2){ loginMsg.textContent = 'Las contraseñas no coinciden.'; return; }
-      admin = { user: u, pass: p };
-      try{
-        await fetch(ADMIN_URL, { method:'PUT', body: JSON.stringify(admin) });
-      }catch(e){}
-      enterDashboard();
-    } else {
-      if(u === admin.user && p === admin.pass){
-        enterDashboard();
-      } else {
-        loginMsg.textContent = 'Usuario o contraseña incorrectos.';
-      }
-    }
-  });
-
-  document.getElementById('changePassBtn').addEventListener('click', () => {
-    admin = null;
-    dashView.style.display = 'none';
-    loginView.style.display = 'block';
-    renderLoginView();
-    loginHint.textContent = 'Creá tu nuevo usuario y contraseña.';
-  });
-
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    dashView.style.display = 'none';
-    loginView.style.display = 'block';
-    renderLoginView();
-  });
-
-  async function enterDashboard(){
-    loginView.style.display = 'none';
-    dashView.style.display = 'block';
-    let config = { ...DEFAULTS };
-    try{
-      const res = await fetch(CONFIG_URL);
-      const data = await res.json();
-      if(data){ config = { ...config, ...data }; }
-    }catch(e){ /* usa defaults */ }
-    document.getElementById('tgInput').value = config.telegram;
-    document.getElementById('promoPercentInput').value = config.promoPercent;
-    document.getElementById('promoTextInput').value = config.promoText;
+  if (config.game && config.game.active) {
+    container.appendChild(buildButton('primary', ICONS.game, config.game.url, config.game.label || 'Ingresar', 'Acceder a la plataforma'));
+    rendered++;
   }
 
-  document.getElementById('saveBtn').addEventListener('click', async () => {
-    const tg = document.getElementById('tgInput').value.trim().replace('@','');
-    const pct = document.getElementById('promoPercentInput').value.trim().replace(/\D/g,'');
-    const txt = document.getElementById('promoTextInput').value.trim();
-
-    if(!tg || !pct || !txt){
-      saveMsg.className = 'msg error';
-      saveMsg.textContent = 'Completá todos los campos.';
-      return;
-    }
-    const config = { telegram: tg, promoPercent: pct, promoText: txt };
-    try{
-      await fetch(CONFIG_URL, { method:'PUT', body: JSON.stringify(config) });
-      saveMsg.className = 'msg success';
-      saveMsg.textContent = 'Cambios guardados. Ya se reflejan en la página pública.';
-    }catch(e){
-      saveMsg.className = 'msg error';
-      saveMsg.textContent = 'No se pudo guardar. Intentá de nuevo.';
-    }
+  (config.whatsapp || []).filter(w => w.active && w.number).forEach((w) => {
+    container.appendChild(buildButton('whatsapp', ICONS.whatsapp, waLink(w.number), w.label || 'WhatsApp', 'Soporte y comunidad'));
+    rendered++;
   });
 
-  document.getElementById('resetAdminBtn').addEventListener('click', async ()=>{
-    if(confirm('Esto eliminará el usuario administrador guardado. ¿Continuar?')){
-      try{
-        await fetch(ADMIN_URL,{method:'DELETE'});
-        admin=null;
-        renderLoginView();
-        alert('Administrador eliminado. Ahora podés crear uno nuevo.');
-      }catch(e){
-        alert('No se pudo restablecer.');
-      }
-    }
-  });
+  if (config.telegram && config.telegram.active) {
+    container.appendChild(buildButton('telegram', ICONS.telegram, config.telegram.url, config.telegram.label || 'Telegram', 'Canal oficial'));
+    rendered++;
+  }
 
-  loadAdmin();
+  if (rendered === 0) {
+    container.innerHTML = '<p class="empty-note">Todos los canales están inactivos ahora mismo.</p>';
+  }
+}
+
+render();
 </script>
-
 </body>
 </html>
