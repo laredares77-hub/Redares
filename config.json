@@ -13,9 +13,15 @@
     },
     {
       "id": "wa_2",
-      "label": "Cajera agus",
-      "number": "5492964576248",
-      "active": false
+      "label": "Rocio",
+      "number": "5492901304843",
+      "active": true
+    },
+    {
+      "id": "wa_1_1784418793928",
+      "label": "Susi",
+      "number": "5492901304846",
+      "active": true
     }
   ],
   "telegram": {
